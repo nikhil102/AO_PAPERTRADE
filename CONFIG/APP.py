@@ -7,10 +7,20 @@ if platform.system() == "Linux":
     ENV_TYPE : str = 'SERVER'
     MStime : str = '09:15'
     MEtime : str = '15:25'
+    CURRENT_PATH_CONFIG = ''
+    CURRENT_PATH_CONFIG = os.path.join("opt","AO_PAPERTRADE")
+    CURRENT_Path = ''
+    #CURRENT_Path = os.path.dirname(CURRENT_PATH_CONFIG)
+    CURRENT_Path = CURRENT_PATH_CONFIG
 else:
     ENV_TYPE : str = 'LOCAL'
     MStime : str = '01:00'
     MEtime : str = '23:57'
+    CURRENT_PATH_CONFIG = ''
+    CURRENT_PATH_CONFIG = os.getcwd()
+    CURRENT_Path = ''
+    #CURRENT_Path = os.path.dirname(CURRENT_PATH_CONFIG)
+    CURRENT_Path = CURRENT_PATH_CONFIG
     
 # AWS Configuration
 AWS_ACCESS_KEY : str = 'AKIAWKJPM2XTVP23YD2P'
@@ -73,11 +83,7 @@ OPT_Lotsize: str = '15'
 OPT_EXCHANGE_SEGMENT: str = 'NFO'
 
 # PATH
-CURRENT_PATH_CONFIG = ''
-CURRENT_PATH_CONFIG = os.getcwd()
-CURRENT_Path = ''
-#CURRENT_Path = os.path.dirname(CURRENT_PATH_CONFIG)
-CURRENT_Path = CURRENT_PATH_CONFIG
+
 OPT_TOKEN_FILES_LOCAL_DIRECTORY = os.path.join(CURRENT_Path, "OPT_TOKEN_FILES")
 FUT_TOKEN_FILES_LOCAL_DIRECTORY = os.path.join(CURRENT_Path, "FUT_TOKEN_FILE")
 
