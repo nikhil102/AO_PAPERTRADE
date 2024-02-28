@@ -61,4 +61,3 @@ class CUSTOM_SELECT:
 
     def Check_expiry_status(self):
         return f""" SELECT DATE_FORMAT(CURDATE(), '%Y-%m-%d') <= FUT_EXPIRY_DATE AS FUT_EX_OVER, DATE_FORMAT(CURDATE(), '%Y-%m-%d') <= OPT_EXPIRY_DATE AS OPT_EX_OVER FROM {self.Table_Name}; """
-
