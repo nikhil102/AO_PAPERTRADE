@@ -4,7 +4,6 @@ from datetime import datetime, date, timedelta
 from io import BytesIO
 import pickle
 import ujson
-
 # CUSTOM
 from CONFIG import APP as APPCONFIG
 import LIB_FUN_HELPER as HELPER
@@ -15,7 +14,6 @@ import LIB_LOGGER as LOG
 
 Check_Updated_Time_ByPass = True
 Check_MARKET_IS_OPEN_TODAY_ByPass = False
-
 
 FPSD = FPSD()
 
@@ -194,3 +192,4 @@ def VALIDATE():
       LOG.ADD_ERR_LOG_INTO_DB(MODULE_NAME,'CRITICAL_ERROR',f"CHECKS_1 or  CHECKS_2 is FALSE OR {key3} NOT FOUND in FUT_FILE_DATA")
       HELPER.CREATE_ERROR_FILE_TO_STOP_CRON()
       exit()
+      

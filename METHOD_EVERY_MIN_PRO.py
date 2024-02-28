@@ -1,16 +1,5 @@
-import multiprocessing
-import schedule
-import time
 from datetime import datetime
-import hashlib
-import os
-import pickle
-import time
-import asyncio
-import pprint
 import pandas as pd
-from diskcache import FanoutCache
-from pprint import pprint as pprint
 import uuid
 
 # CUSTOM
@@ -241,7 +230,6 @@ def Every_Minute_PROCESS(FUTC,opt_t_ce_df,opt_t_pe_df):
                                            if EX_LTP > 0:
                                               EX_OPT_PRICE = EX_LTP 
                                               EXIT_TRADE(row_UID,EN_T_SIGNAL,FPRICE,EX_OPT_PRICE,C_NUM)
-                                              print("EXIT_TRADE")
                                            else:
                                               LOG.ADD_ERR_LOG_INTO_DB(INNER_MODULE_NAME,'ERROR',f"OPT_PRICE LESS THEN 0 WHILE EXIT THE TRADE")
                                               continue 
