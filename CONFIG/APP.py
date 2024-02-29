@@ -8,7 +8,8 @@ if platform.system() == "Linux":
     MStime : str = '09:15'
     MEtime : str = '15:25'
     CURRENT_PATH_CONFIG = ''
-    CURRENT_PATH_CONFIG = os.path.join("opt","AO_PAPERTRADE")
+    #CURRENT_PATH_CONFIG = os.path.join("opt","opt","AO_PAPERTRADE")
+    CURRENT_PATH_CONFIG = '/opt/AO_PAPERTRADE'
     CURRENT_Path = ''
     #CURRENT_Path = os.path.dirname(CURRENT_PATH_CONFIG)
     CURRENT_Path = CURRENT_PATH_CONFIG
@@ -83,7 +84,6 @@ OPT_Lotsize: str = '15'
 OPT_EXCHANGE_SEGMENT: str = 'NFO'
 
 # PATH
-
 OPT_TOKEN_FILES_LOCAL_DIRECTORY = os.path.join(CURRENT_Path, "OPT_TOKEN_FILES")
 FUT_TOKEN_FILES_LOCAL_DIRECTORY = os.path.join(CURRENT_Path, "FUT_TOKEN_FILE")
 
@@ -115,4 +115,3 @@ Exchange : str = 'NSE'
 #market open and close time
 
 TR_No_results = {'RECOMMENDATION': 'NO_RESPONSE', 'BUY': 0, 'SELL': 0, 'NEUTRAL': 0}
-

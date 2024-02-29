@@ -1,0 +1,21 @@
+vim /etc/systemd/system/tgs.service
+---------------------------------------------------------------
+[Unit]
+Description=TGS JOB
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /opt/AO_PAPERTRADE/SCRIPT_TGS.py
+---------------------------------------------------------------
+timedatectl
+sudo timedatectl set-timezone Asia/Kolkata
+timedatectl
+
+
+sudo systemctl daemon-reload
+
+sudo systemctl start tgs.service
+sudo systemctl stop tgs.service
+sudo systemctl restart tgs.service
+
+/usr/bin/python3 /opt/AO_PAPERTRADE/SCRIPT_PTS.py
