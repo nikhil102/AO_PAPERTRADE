@@ -1,0 +1,191 @@
+3) Detailed Flows — POC 1B & 2B (Interim, Non-Databricks)
+
+Note:
+
+.dat → Parquet conversion is handled in POC 1A using Caspian + Airflow.
+
+POC 1B uses a local PySpark script (converted from wf_IPS_informatica_workflow) reading Parquet from S3 and loading into CDM Pre-Landing (PostgreSQL).
+
+POC 2B uses the same PySpark logic, run locally, reading raw .dat from a local or S3 folder and loading into a Postgres test table for validation.
+
+3.1 POC 1B — Caspian Parquet → CDM S3 → Pre-Landing DB (Local PySpark)
+
+Overview
+POC 1B validates the end-to-end flow for a sample raw file using Caspian + Airflow (POC 1A) for .dat → Parquet conversion and a local PySpark script (converted from wf_IPS_informatica_workflow) to load data into CDM Pre-Landing (PostgreSQL).
+
+Flow Steps
+
+Upload a sample raw .dat file to the inbound S3 folder:
+cdm-saas-ingress-dev-us-west-2/caspian/inbound/.
+
+Manually trigger the Caspian + Airflow DAG (POC 1A).
+
+Caspian + Airflow read the raw file from the inbound folder, convert it to Parquet, and write it to the outbound S3 folder (e.g. .../caspian/outbound/).
+
+After the Airflow run completes successfully, manually trigger the local PySpark script (POC 1B).
+
+The PySpark script reads the Parquet file from the outbound S3 folder, applies Transform / Clean / Validate / Merge logic based on wf_IPS_informatica_workflow, and
+
+Loads the curated data into the CDM Pre-Landing PostgreSQL table.
+
+Execution
+
+Compute: Local PySpark script (Informatica workflow reimplemented in code).
+
+Storage: Raw .dat in S3 inbound → Parquet in S3 outbound → Postgres (CDM Pre-Landing) as target.
+
+Triggering: Both the Airflow DAG (POC 1A) and the PySpark script (POC 1B) are manually triggered for this POC.
+
+Evaluation Signals (1B)
+
+End-to-end latency (S3 Parquet → Postgres).
+
+Data quality pass rate vs existing IPS rules.
+
+Functional parity with Informatica wf_IPS_informatica_workflow (row counts, key metrics, sample data).
+
+Expected Outcomes
+
+Confirm that IPS logic converted to PySpark works correctly on Caspian-generated Parquet.
+
+Establish a reusable Parquet-based ingestion pattern that can later be moved to a managed Spark platform if required.
+
+3.2 POC 2B — Direct Raw → Local/S3 Folder → Pre-Landing Test Table (Local PySpark)
+
+Overview
+POC 2B validates the same IPS logic directly on raw .dat files, without Caspian or Airflow.
+A local PySpark script (based on wf_IPS_informatica_workflow) is run manually, reading a sample raw file from a local folder or CDM S3 folder and loading results into the Postgres test table test_table_associate_territory_coverage.
+
+Flow Steps
+
+Place a sample raw .dat file in a local folder or a CDM S3 bucket folder (POC landing location).
+
+Manually execute the local PySpark script (POC 2B).
+
+The PySpark script reads the raw .dat file from the configured local path or S3 path.
+
+Apply schema enforcement, cleansing, enrichment, and joins as per wf_IPS_informatica_workflow.
+
+Load curated data into the Postgres test table test_table_associate_territory_coverage.
+
+Verify loaded data manually in Postgres (row counts, sample records).
+
+Execution
+
+Compute: Local PySpark (variant of the converted IPS workflow).
+
+Storage: Raw .dat from local or S3 as input; Postgres test table as target.
+
+Orchestration: Manual script execution only (no Airflow used in POC 2B).
+
+Evaluation Signals (2B)
+
+Schema correctness and transformation behavior on raw .dat input.
+
+Functional parity with Informatica for the IPS flow on test_table_associate_territory_coverage.
+
+Relative effort and complexity vs the Parquet-based POC 1B path.
+
+Expected Outcomes
+
+Validate that the converted PySpark logic runs end-to-end directly on raw files.
+
+Provide a simple local-only validation path that can later be extended to use S3 + Airflow if needed.
+
+13) Measurement & Reporting
+
+Execution Window
+
+Run multiple executions per scenario (POC 1B and POC 2B) using comparable input volumes to gather stable metrics.
+
+Report Pack (POC Output)
+
+Run Summaries:
+
+Durations per run
+
+Success/failure status
+
+Retry counts (if any)
+
+Throughput Charts:
+
+Rows/sec across POC runs
+
+Simple comparison between Parquet path (1B) and raw path (2B)
+
+DQ Results:
+
+Rule pass percentages
+
+Exception volumes (rows sent to reject/error handling)
+
+Notes:
+
+Any manual interventions
+
+Observed edge cases (schema issues, null handling, etc.)
+
+Differences vs Informatica behavior (if observed)
+
+14) Deliverables
+
+Working Airflow DAG(s) and PySpark pipelines for:
+
+POC 1A: Caspian + Airflow .dat → Parquet
+
+POC 1B: Parquet (S3) → PySpark → CDM Pre-Landing
+
+POC 2B: Raw .dat (local/S3) → PySpark → Postgres test table
+
+Caspian + Airflow configuration for POC 1A (.dat → Parquet).
+
+Metrics report covering performance, data quality, and reliability with POC baselines.
+
+Orchestration proof showing Airflow DAG runs and logs for the POC 1A/1B path.
+
+Observability baseline: logging and basic dashboards (e.g., run status, timing, row counts).
+
+Production-ready recommendation and high-level migration plan (e.g., how to move from local PySpark to EMR/EKS or another managed Spark environment if approved).
+
+15.2 Status – ✅ Completed Items
+
+Informatica workflow wf_IPS_informatica_workflow converted into PySpark code.
+
+Local PySpark script reads files from S3 (not just local disk) for POC.
+
+Successful pipeline execution and data load into Postgres test table
+
+e.g. test_table_associate_territory_coverage.
+
+Airflow execution access is in place.
+
+Inbound and outbound S3 folders created and sample .dat file uploaded.
+
+Input and Output paths confirmed:
+
+Input: cdm-saas-ingress-dev-us-west-2/caspian/inbound/
+
+Output: cdm-saas-ingress-dev-us-west-2/caspian/outbound/
+
+Airflow DAG development:
+
+New DAG boilerplate code created.
+
+Initial manual trigger and S3 I/O verified.
+
+15.3 Status – 🔄 Pending Items
+
+Create YAML configuration file for pipeline settings (converter .dat → Parquet logic, schema, thresholds).
+
+Configure S3 bucket permissions and IAM roles as per security requirements.
+
+Implement unit tests for the converter and PySpark load pipeline.
+
+Build and test the full Airflow DAG with complete business logic (fresh/delta paths).
+
+Perform end-to-end testing:
+
+S3 inbound → Caspian Parquet (POC 1A) → PySpark Pre-Landing load (POC 1B/2B).
+
+Update config.yml or environment variable file and redeploy DAG with final logic.
