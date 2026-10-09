@@ -1,0 +1,51 @@
+{
+  "connection": {
+    "jdbc_url": "${FABRIC_JDBC_URL}",
+    "driver": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
+    "authentication": "${FABRIC_AUTH_MODE:service_principal}",
+    "tenant_id": "${FABRIC_TENANT_ID:}",
+    "client_id": "${FABRIC_CLIENT_ID:}",
+    "client_secret": "${FABRIC_CLIENT_SECRET:}",
+    "user": "${FABRIC_SQL_USER:}",
+    "password": "${FABRIC_SQL_PASSWORD:}",
+    "access_token": "${FABRIC_ACCESS_TOKEN:}",
+    "fetch_size": "${FABRIC_FETCH_SIZE:10000}",
+    "query_timeout_seconds": "${FABRIC_QUERY_TIMEOUT_SECONDS:3600}"
+  },
+  "objects": {
+    "source_agreement": "DIDW02.dbo.INTG_Agreement",
+    "code_description": "DIDW02.dbo.INTG_CodeDescription",
+    "target_agreement": "EDW02.dbo.DIM_Agreement",
+    "audit_balance_control": "ETL_DW_Management.dbo.ETL_AuditBalanceControl",
+    "exception": "ETL_DW_Management.dbo.ETL_Exception",
+    "staging_schema": "dbo"
+  },
+  "session": {
+    "folder_name": "${PM_FOLDER_NAME:EDW02}",
+    "workflow_name": "${PM_WORKFLOW_NAME:wf_DIM_Agreement__INTG_Agreement}",
+    "session_name": "${PM_SESSION_NAME:s_m_DIM_Agreement__INTG_Agreement}",
+    "repository_user": "${ETL_RUN_AS:fabric-pyspark}",
+    "source_system_name": "${SRC_SYSTEM_NM:SSC}"
+  },
+  "runtime": {
+    "app_name": "m_DIM_Agreement__INTG_Agreement",
+    "default_flag_for_null": "N",
+    "expiration_offset_days": 2,
+    "target_rows_per_partition": 250000,
+    "min_shuffle_partitions": 8,
+    "max_shuffle_partitions": 200,
+    "jdbc_read_partitions": 16,
+    "jdbc_write_partitions": 16,
+    "batch_size": 5000,
+    "transaction_retries": 3,
+    "active_run_timeout_minutes": 240,
+    "cleanup_staging": true,
+    "spark_configs": {
+      "spark.sql.adaptive.enabled": "true",
+      "spark.sql.adaptive.coalescePartitions.enabled": "true",
+      "spark.sql.ansi.enabled": "true",
+      "spark.sql.session.timeZone": "UTC",
+      "spark.sql.caseSensitive": "true"
+    }
+  }
+}
